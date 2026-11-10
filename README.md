@@ -1,78 +1,54 @@
-# SIGVC - Sistema Integral de Gestión y Venta de Consumibles (SaaS)
+# SIGVC - Sistema Integral de Gestión y Venta de Consumibles (Cliente Android)
 
-El SIGVC es una plataforma en la nube (SaaS) desarrollada a la medida para centralizar la administración multi-sucursal, automatizar el control de inventarios, agilizar los procesos de venta en mostrador y proporcionar visibilidad financiera exacta sobre la rentabilidad neta real de cada local comercial.
+El SIGVC es una plataforma en la nube (SaaS) desarrollada a la medida para centralizar la administración multi-sucursal, automatizar el control de inventarios y agilizar los procesos de venta. Este repositorio contiene el frontend móvil desarrollado para dispositivos Android, diseñado para operar como Punto de Venta (POS) en mostrador y panel de control administrativo.
 
 ## Características y Beneficios Principales
 
-* Punto de Venta Ultrarrápido: Interfaces responsivas y amigables diseñadas para reducir los tiempos de espera en el mostrador a unos pocos segundos.
+* Punto de Venta Ágil: Interfaz nativa optimizada para reducir los tiempos de espera en el mostrador a unos pocos segundos, permitiendo cobros rápidos mediante un catálogo táctil.
 
-* Inventario Autónomo y Blindado: El stock se descuenta de forma automática y en tiempo real al registrar una venta (gestionado directamente mediante Triggers en la base de datos para erradicar el error humano).
+* Sincronización en Tiempo Real: Conexión directa mediante API REST al backend principal, garantizando que el inventario se descuente de forma automática al registrar una venta.
 
-* Precisión Financiera de Nivel Bancario: El sistema procesa los valores monetarios en centavos enteros para evitar pérdidas por problemas de redondeo de punto flotante, garantizando que la contabilidad cuadre a la perfección.
+* Seguridad por Roles: Interfaces dinámicas que restringen la información financiera confidencial a los cajeros y otorgan control de mando y reportes de rentabilidad al administrador.
 
-* Ganancia Neta Real: Módulo financiero exclusivo para registrar gastos operativos diarios (agua, gas, transporte), restándolos automáticamente de los ingresos para mostrar la utilidad diaria exacta.
+* Diseño Ergonomico: Interfaz construida bajo el estándar Material Design y la paleta corporativa "Índigo Minimalista", previniendo la fatiga visual en turnos largos.
 
-* Seguridad por Roles: Interfaces dinámicas que restringen la información financiera a los cajeros y otorgan control de mando absoluto al administrador.
+## Stack Tecnológico (Frontend Móvil)
 
-* El "Libro Mayor" Inmutable: Historial de auditoría (Kardex) para rastrear cada entrada, salida o merma y prevenir fugas de capital.
+Este proyecto móvil está diseñado para consumir la API Web (construida en ASP.NET Core 8) y conectarse a la base de datos central en PostgreSQL.
 
-## Arquitectura y Stack Tecnológico
-
-Este proyecto fue construido utilizando la metodología de Vertical Slicing (desarrollo por módulos) y una arquitectura Modelo-Vista-Controlador (MVC), garantizando escalabilidad y un alto rendimiento.
-
-Backend:
-* C#
-* ASP.NET Core 8 MVC
-* Entity Framework Core (Database First / Scaffolding)
-
-Frontend:
-* HTML5 / CSS3 / JavaScript
-* Bootstrap (Personalizado con paleta corporativa "Índigo Minimalista")
-* Diseño 100% Responsivo (Mobile-First)
-
-Base de Datos:
-* PostgreSQL (Diseño Relacional altamente normalizado en 3NF)
-* Uso intensivo de lógica en base de datos (Triggers y Functions para automatización).
+* Entorno de Desarrollo: Android Studio
+* Lenguaje: Kotlin / Java
+* Arquitectura Sugerida: MVVM (Model-View-ViewModel)
+* Interfaz de Usuario: XML / Material Design Components
+* Consumo de API: Retrofit / OkHttp (para comunicación con el backend en C#)
 
 ## Configuración e Instalación (Entorno de Desarrollo)
 
 ### Prerrequisitos
 
-* .NET 8.0 SDK
-* PostgreSQL (v14 o superior)
-* Visual Studio 2022 (o IDE compatible)
+* Android Studio (versión más reciente recomendada Iguana o superior)
+* Android SDK (API Level 24 o superior)
+* Dispositivo físico Android o Emulador configurado (AVD)
+* Acceso local o remoto a la API Web del SIGVC ejecutándose en IIS/Kestrel.
 
 ### Pasos para ejecutar el proyecto
 
 1. Clonar el repositorio:
-   ```bash
-   git clone https://github.com/tu-usuario/SIGVC.git
-   ```
+   git clone https://github.com/tu-usuario/SIGVC-Android.git
 
-2. Configurar la Base de Datos:
-   * Restaura el script de la base de datos `sigvc.sql` en tu servidor PostgreSQL para crear las 13 tablas, relaciones y triggers.
+2. Abrir en Android Studio:
+   * Inicia Android Studio.
+   * Selecciona "Open" y navega hasta la carpeta del proyecto clonado.
+   * Espera a que Gradle sincronice todas las dependencias del proyecto.
 
-3. Configurar la Cadena de Conexión:
-   * Abre el archivo `appsettings.json` en la raíz del proyecto web.
-   * Actualiza el bloque de conexión con tus credenciales locales:
-   ```json
-   "ConnectionStrings": {
-     "ConexionPostgres": "Host=localhost;Database=sigvc;Username=postgres;Password=TU_CONTRASEÑA"
-   }
-   ```
+3. Configurar la conexión a la API:
+   * Localiza el archivo de configuración de red (usualmente un archivo de constantes o `build.gradle`).
+   * Actualiza la URL base de la API para que apunte a tu servidor local de .NET o a tu entorno de producción. Por ejemplo: `http://10.0.2.2:5000/api/` (si usas el emulador local).
 
-4. Restaurar Paquetes NuGet:
-   Abre la Consola del Administrador de Paquetes en Visual Studio y ejecuta:
-   ```powershell
-   Update-Package -reinstall
-   ```
-   *(Asegúrate de tener instalados `Npgsql.EntityFrameworkCore.PostgreSQL` y `Microsoft.EntityFrameworkCore.Tools`).*
+4. Compilar y Ejecutar:
+   * Selecciona tu dispositivo físico conectado o tu emulador en la barra superior.
+   * Presiona el botón "Run" (Shift + F10) para compilar el APK e instalarlo en el dispositivo.
 
-5. Compilar y Ejecutar:
-   Presiona `F5` en Visual Studio para iniciar el proyecto en IIS Express o Kestrel.
+## Notas Adicionales
 
-## Despliegue (Producción)
-
-El proyecto está optimizado para ser hospedado en IIS (Internet Information Services) de Windows utilizando el ASP.NET Core Hosting Bundle, o en cualquier servidor de aplicaciones en la nube (Azure, AWS) que soporte .NET 8.
-
-Desarrollado con enfoque en la rentabilidad, la automatización y el control absoluto del negocio.
+El backend de este proyecto (API y Base de Datos PostgreSQL) debe estar en ejecución para que la aplicación móvil pueda autenticar usuarios, cargar el catálogo de productos y registrar ventas.
